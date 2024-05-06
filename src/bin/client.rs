@@ -21,7 +21,7 @@ async fn main() -> Result<(), tokio_websockets::Error> {
                 match incoming {
                     Some(Ok(msg)) => {
                         if let Some(text) = msg.as_text() {
-                            println!("From server: {}", text);
+                            println!("From sasa's computer: {}.", text);
                         }
                     },
                     Some(Err(err)) => return Err(err.into()),
@@ -31,7 +31,10 @@ async fn main() -> Result<(), tokio_websockets::Error> {
             res = stdin.next_line() => {
                 match res {
                     Ok(None) => return Ok(()),
-                    Ok(Some(line)) => ws_stream.send(Message::text(line.to_string())).await?,
+                    Ok(Some(line)) => {
+                            let quoted_line = format!("\"{}\"", line.trim());
+                            ws_stream.send(Message::text(line.to_string())).await?;
+                        },
                     Err(err) => return Err(err.into()),
                 }
             }
